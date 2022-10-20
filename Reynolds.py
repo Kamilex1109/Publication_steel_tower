@@ -1,7 +1,7 @@
 import math
 
 z = [0, 8.57143, 17.14286, 25.71429, 34.28571, 42.85714, 51.42857, 60]
-Przekroj = "LR 101.3x5"
+Przekroj_elementu = "LR 101.3x5"
 stefa_wiatru = 1
 a = 300
 C_dir = 1
@@ -9,7 +9,7 @@ C_season = 1
 p = 1.25
 kategoria_terenu = 0
 
-b_rury = float(Przekroj[3:6]) / 1000
+
 l_dlugosc = 30
 
 def predkosc_wiatru(stefa_wiatru, a):
@@ -28,7 +28,7 @@ def predkosc_wiatru(stefa_wiatru, a):
             v_b0 = 22*(1+0.0006*(int(a)-300))
         else:
             v_b0 = 22
-    return v_b0
+    return v_b0 
 
 # ----- Wartość bazowa ciśnienia prędkości wiatru -----
 def bazowa_predkosc_wiatru(C_season, C_dir, v_b0):
@@ -134,43 +134,52 @@ def predkosc_wiatru_v_m_z(q_p_z):
     v_m_z = math.sqrt((2 * q_p_z) / p)
     return v_m_z
 
-v_b0 = predkosc_wiatru(stefa_wiatru, a)
-v_b = bazowa_predkosc_wiatru(C_season,C_dir, v_b0)
-q_b = wartosc_bazowa_cisnienia_predkosci(p, v_b)
-z_min1 = z_min(kategoria_terenu)
-z_max1 = z_max(kategoria_terenu)
-z_01 = z_0(kategoria_terenu)
-A_c_z = []          # podkrytyczny
-A_c_sup_z = []      # nadkrytyczny
-A_f_z = []
-y_test = 0
-while y_test < (len(z)-1):
-    if y_test < (len(z)-1):
-        print(z)
-        print(v_b0)
-        wysokosc_z1 = wysokosc_z(z[y_test])
-        C_e_z = wspolczynnik_ekspozycji(kategoria_terenu,wysokosc_z1)
-        q_p_z = wartosc_szczytowa_cisnienia(C_e_z, q_b)
-        v_m_z = predkosc_wiatru_v_m_z(q_p_z)
-        A_c_z.append(0)
-        A_c_sup_z.append(0)
-        A_f_z.append(0)
-        if Przekroj[0:2] == "RO":
-            Re = (b_rury * (15 * (10 ** (-6)))) / v_m_z
-            if Re <= (4 * (10 ** 5)):
-                A_c_z_n = b_rury * l_dlugosc
-                A_c_z[y_test] = 2 * A_c_z_n
+x_test = 0
+while x_test < (len(Przekroj_elementu)-1):
+    if x_test < (len(Przekroj_elementu)-1):
+        Przekroj = Przekroj_elementu
+        b_rury = float(Przekroj[3:6]) / 1000
+        v_b0 = predkosc_wiatru(stefa_wiatru, a)
+        v_b = bazowa_predkosc_wiatru(C_season,C_dir, v_b0)
+        q_b = wartosc_bazowa_cisnienia_predkosci(p, v_b)
+        z_min1 = z_min(kategoria_terenu)
+        z_max1 = z_max(kategoria_terenu)
+        z_01 = z_0(kategoria_terenu)
+        A_c_z = []          # podkrytyczny
+        A_c_sup_z = []      # nadkrytyczny
+        A_f_z = []
+        y_test = 0
+        while y_test < (len(z)-1):
+            if y_test < (len(z)-1):
+                print(z)
+                print(v_b0)
+                wysokosc_z1 = wysokosc_z(z[y_test])
+                C_e_z = wspolczynnik_ekspozycji(kategoria_terenu,wysokosc_z1)
+                q_p_z = wartosc_szczytowa_cisnienia(C_e_z, q_b)
+                v_m_z = predkosc_wiatru_v_m_z(q_p_z)
+                A_c_z.append(0)
+                A_c_sup_z.append(0)
+                A_f_z.append(0)
+                if Przekroj[0:2] == "RO":
+                    Re = (b_rury * (15 * (10 ** (-6)))) / v_m_z
+                    if Re <= (4 * (10 ** 5)):
+                        A_c_z_n = b_rury * l_dlugosc
+                        A_c_z[y_test] = 2 * A_c_z_n
+                    else:
+                        A_c_sup_z_n = b_rury * l_dlugosc
+                        A_c_sup_z[y_test] = 2 * A_c_sup_z_n
+                elif Przekroj[0:2] == "LR":
+                    A_f_z_n = b_rury * l_dlugosc
+                    A_f_z[y_test] = 2 * A_f_z_n
             else:
-                A_c_sup_z_n = b_rury * l_dlugosc
-                A_c_sup_z[y_test] = 2 * A_c_sup_z_n
-        elif Przekroj[0:2] == "LR":
-            A_f_z_n = b_rury * l_dlugosc
-            A_f_z[y_test] = 2 * A_f_z_n
+                break
+            y_test += 1 
+        Pola = []
+        Pola.append(A_c_z)
+        Pola.append(A_c_sup_z)
+        Pola.append(A_f_z)
     else:
         break
-    y_test += 1
-Pola = []
-Pola.append(A_c_z)
-Pola.append(A_c_sup_z)
-Pola.append(A_f_z)
+    x_test += 1
+
 
