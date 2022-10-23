@@ -2,7 +2,7 @@ import math
 
 z = [0, 8.57143, 17.14286, 25.71429, 34.28571, 42.85714, 51.42857, 60]
 # Przekroj_elementu = "RO 721.3x5"
-Przekroj_elementu = ["RO 721.3x5", "LR 125.3x5", "RO 135.3x10"]
+Przekroj_elementu = ["RO 100.3x5", "LR 125.3x5", "RO 100.3x10"]
 stefa_wiatru = 1
 a = 300
 C_dir = 1
@@ -11,7 +11,7 @@ p = 1.25
 kategoria_terenu = 0
 
 
-l_dlugosc = 30
+l_dlugosc = [10, 20, 10]
 
 def predkosc_wiatru(stefa_wiatru, a):
     if int(stefa_wiatru)==1:
@@ -160,10 +160,10 @@ print(A_f_z)
 
 
 x_test = 0
-while x_test < (len(Przekroj_elementu)-1):
+while x_test < (len(Przekroj_elementu)):
     Przekroj = Przekroj_elementu[x_test]
     b_rury = float(Przekroj[3:6]) / 1000
-    if x_test < (len(Przekroj_elementu)-1):
+    if x_test < (len(Przekroj_elementu)):
         y_test = 0
         while y_test < (len(z)-1):
             if y_test < (len(z)-1):
@@ -176,14 +176,14 @@ while x_test < (len(Przekroj_elementu)-1):
                 if Przekroj[0:2] == "RO":
                     Re = (b_rury * (15 * (10 ** (-6)))) / v_m_z
                     if Re <= (4 * (10 ** 5)):
-                        A_c_z_n = b_rury * l_dlugosc
-                        A_c_z[y_test] = 2 * A_c_z_n
+                        A_c_z_n = b_rury * l_dlugosc[x_test]
+                        A_c_z[y_test] += 2 * A_c_z_n
                     else:
-                        A_c_sup_z_n = b_rury * l_dlugosc
-                        A_c_sup_z[y_test] = 2 * A_c_sup_z_n
+                        A_c_sup_z_n = b_rury * l_dlugosc[x_test]
+                        A_c_sup_z[y_test] += 2 * A_c_sup_z_n
                 elif Przekroj[0:2] == "LR":
-                    A_f_z_n = b_rury * l_dlugosc
-                    A_f_z[y_test] = 2 * A_f_z_n
+                    A_f_z_n = b_rury * l_dlugosc[x_test]
+                    A_f_z[y_test] += 2 * A_f_z_n
             else:
                 break
             y_test += 1
