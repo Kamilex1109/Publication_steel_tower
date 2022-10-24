@@ -1,7 +1,6 @@
 import math
 
 z = [0, 8.57143, 17.14286, 25.71429, 34.28571, 42.85714, 51.42857, 60]
-# Przekroj_elementu = "RO 721.3x5"
 Przekroj_elementu = ["RO 100.3x5", "LR 125.3x5", "RO 100.3x10"]
 stefa_wiatru = 1
 a = 300
@@ -147,17 +146,10 @@ A_f_z = []
 
 c = int(len(z) - 1)
 z1 = z[: c]
-print(z1)
 for X in z1:
     A_c_z.append(0)
     A_c_sup_z.append(0)
     A_f_z.append(0)
-
-print(A_c_z)
-print(A_c_sup_z)
-print(A_f_z)
-
-
 
 x_test = 0
 while x_test < (len(Przekroj_elementu)):
@@ -167,8 +159,6 @@ while x_test < (len(Przekroj_elementu)):
         y_test = 0
         while y_test < (len(z)-1):
             if y_test < (len(z)-1):
-                print(z)
-                print(v_b0)
                 wysokosc_z1 = wysokosc_z(z[y_test])
                 C_e_z = wspolczynnik_ekspozycji(kategoria_terenu,wysokosc_z1)
                 q_p_z = wartosc_szczytowa_cisnienia(C_e_z, q_b)
