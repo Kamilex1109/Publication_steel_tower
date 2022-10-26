@@ -185,4 +185,3 @@ Pola = []
 Pola.append(A_c_z)
 Pola.append(A_c_sup_z)
 Pola.append(A_f_z)
-print(Pola)
